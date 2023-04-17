@@ -22,7 +22,7 @@ dependencies:
 
   inno_model:
     git:
-      url: https://github.com/innoapps-dev/assessment-centre-innoapps
+      url: https://github.com/innoapps-dev/innoapps
       path: packages/inno_model
 
 dev_dependencies:

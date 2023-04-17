@@ -12,7 +12,7 @@ dependencies:
 
   inno_database:
     git:
-      url: https://github.com/innoapps-dev/assessment-centre-innoapps
+      url: https://github.com/innoapps-dev/innoapps
       path: packages/inno_database
 
 dev_dependencies:
