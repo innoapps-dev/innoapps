@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package inno.conference;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoConferenceFieldService {
+rpc ListInnoConferenceFields(ListInnoConferenceFieldsRequest) returns (ListInnoConferenceFieldsResponse) {}
+rpc GetInnoConferenceField(GetInnoConferenceFieldRequest) returns (inno.model.InnoConferenceField) {}
+rpc CreateInnoConferenceField(CreateInnoConferenceFieldRequest) returns (inno.model.InnoConferenceField) {}
+rpc UpdateInnoConferenceField(UpdateInnoConferenceFieldRequest) returns (inno.model.InnoConferenceField) {}
+rpc DeleteInnoConferenceField(DeleteInnoConferenceFieldRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoConferenceFieldsRequest {}
+
+message ListInnoConferenceFieldsResponse {
+  repeated inno.model.InnoConferenceField inno_conference_fields = 1;
+}
+
+message GetInnoConferenceFieldRequest {
+  string id = 1;
+}
+
+message CreateInnoConferenceFieldRequest {
+  string conference_id = 1;
+  string title = 2;
+  string value = 3;
+}
+
+message UpdateInnoConferenceFieldRequest {
+  inno.model.InnoConferenceField inno_conference_field = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoConferenceFieldRequest {
+  string id = 1;
+}

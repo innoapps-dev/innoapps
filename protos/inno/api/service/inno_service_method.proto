@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package inno.service;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoServiceMethodService {
+  rpc ListInnoServiceMethods(ListInnoServiceMethodsRequest) returns (ListInnoServiceMethodsResponse) {}
+  rpc GetInnoServiceMethod(GetInnoServiceMethodRequest) returns (inno.model.InnoServiceMethod) {}
+  rpc CreateInnoServiceMethod(CreateInnoServiceMethodRequest) returns (inno.model.InnoServiceMethod) {}
+  rpc UpdateInnoServiceMethod(UpdateInnoServiceMethodRequest) returns (inno.model.InnoServiceMethod) {}
+  rpc DeleteInnoServiceMethod(DeleteInnoServiceMethodRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoServiceMethodsRequest {}
+
+message ListInnoServiceMethodsResponse {
+  repeated inno.model.InnoServiceMethod inno_service_methods = 1;
+}
+
+message GetInnoServiceMethodRequest {
+  string id = 1;
+}
+
+message CreateInnoServiceMethodRequest {
+  string id = 1;
+  string service_id = 2;
+  string title = 3;
+}
+
+message UpdateInnoServiceMethodRequest {
+  inno.model.InnoServiceMethod inno_service_method = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoServiceMethodRequest {
+  string id = 1;
+}

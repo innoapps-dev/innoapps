@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package inno.text;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoTextService {
+  rpc ListInnoTexts(ListInnoTextsRequest) returns (ListInnoTextsResponse) {}
+  rpc GetInnoText(GetInnoTextRequest) returns (inno.model.InnoText) {}
+  rpc CreateInnoText(CreateInnoTextRequest) returns (inno.model.InnoText) {}
+  rpc UpdateInnoText(UpdateInnoTextRequest) returns (inno.model.InnoText) {}
+  rpc DeleteInnoText(DeleteInnoTextRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoTextsRequest {}
+
+message ListInnoTextsResponse {
+  repeated inno.model.InnoText inno_texts = 1;
+}
+
+message GetInnoTextRequest {
+  string id = 1;
+}
+
+message CreateInnoTextRequest {
+  string title = 1;
+}
+
+message UpdateInnoTextRequest {
+  inno.model.InnoText inno_text = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoTextRequest {
+  string id = 1;
+}

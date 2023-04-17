@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package inno.link;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoLinkService {
+  rpc ListInnoLinks(ListInnoLinksRequest) returns (ListInnoLinksResponse) {}
+  rpc GetInnoLink(GetInnoLinkRequest) returns (inno.model.InnoLink) {}
+  rpc CreateInnoLink(CreateInnoLinkRequest) returns (inno.model.InnoLink) {}
+  rpc UpdateInnoLink(UpdateInnoLinkRequest) returns (inno.model.InnoLink) {}
+  rpc DeleteInnoLink(DeleteInnoLinkRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoLinksRequest {}
+
+message ListInnoLinksResponse {
+  repeated inno.model.InnoLink inno_links = 1;
+}
+
+message GetInnoLinkRequest {
+  string id = 1;
+}
+
+message CreateInnoLinkRequest {
+  string title = 1;
+  string url = 2;
+}
+
+message UpdateInnoLinkRequest {
+  inno.model.InnoLink inno_link = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoLinkRequest {
+  string id = 1;
+}

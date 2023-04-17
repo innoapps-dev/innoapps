@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2a0204e1-f512-44ff-bc32-75f67e93fc01" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/link/inno_link.pb.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/link/inno_link.pbenum.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/link/inno_link.pbgrpc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/link/inno_link.pbjson.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_create_view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_detail_view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_edit_view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_list_view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/analysis_options.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/example/inno_role_example.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/inno_role.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/lib/inno_role.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/lib/src/inno_role_base.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/protos/google/protobuf/empty.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/protos/google/protobuf/timestamp.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/protos/inno/role/inno_role.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/pubspec.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/tables/table.pgsql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_role/test/inno_role_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/analysis_options.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/example/inno_user_example.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/inno_user.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/lib/inno_user.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/lib/src/inno_user.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/protos/google/protobuf/empty.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/protos/google/protobuf/timestamp.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/protos/inno/user/inno_user.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/pubspec.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../inno_user/test/inno_user_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/innoapps.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/innoapps.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/inno_link.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/inno_link.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pb.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pb.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbenum.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbenum.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbgrpc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbgrpc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbjson.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbjson.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/inno_link.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/inno_link.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/protos/inno/links/inno_links.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/protos/inno/link/inno_link.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/tables/table.pgsql" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/tables/table.pgsql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="2B3zPP7GVrNvgaK9sB7duLVb8Eq" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Tests in inno_core" type="DartTestRunConfigurationType" factoryName="Dart Test">
+      <option name="filePath" value="$PROJECT_DIR$" />
+      <option name="scope" value="FOLDER" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2a0204e1-f512-44ff-bc32-75f67e93fc01" name="Changes" comment="" />
+      <created>1656149531347</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1656149531347</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package inno.image;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoImageService {
+  rpc ListInnoImages(ListInnoImagesRequest) returns (ListInnoImagesResponse) {}
+  rpc GetInnoImage(GetInnoImageRequest) returns (inno.model.InnoImage) {}
+  rpc CreateInnoImage(CreateInnoImageRequest) returns (inno.model.InnoImage) {}
+  rpc UpdateInnoImage(UpdateInnoImageRequest) returns (inno.model.InnoImage) {}
+  rpc DeleteInnoImage(DeleteInnoImageRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoImagesRequest {}
+
+message ListInnoImagesResponse {
+  repeated inno.model.InnoImage inno_images = 1;
+}
+
+message GetInnoImageRequest {
+  string id = 1;
+}
+
+message CreateInnoImageRequest {
+  string title = 1;
+  string url = 2;
+}
+
+message UpdateInnoImageRequest {
+  inno.model.InnoImage inno_image = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoImageRequest {
+  string id = 1;
+}

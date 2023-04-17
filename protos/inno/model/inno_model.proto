@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package inno.model;
+
+import "google/protobuf/timestamp.proto";
+
+message InnoConference {
+  string id = 1;
+  string title = 2;
+  InnoConferenceProvider provider = 3;
+  repeated InnoConferenceField fields = 4;
+}
+
+message InnoConferenceField {
+  string id = 1;
+  string name = 2;
+  string value = 3;
+}
+
+message InnoConferenceProvider {
+  string id = 1;
+  string title = 2;
+}
+
+message InnoEvent{
+  string id = 1;
+  string title = 2;
+  repeated InnoEventSession sessions = 3;
+}
+
+message InnoEventSession {
+  string id = 1;
+  string event_id = 2;
+  string title = 3;
+  string description = 4;
+  google.protobuf.Timestamp start_date_time = 5;
+  google.protobuf.Timestamp end_date_time = 6;
+  repeated InnoConference conferences = 7;
+  repeated InnoLink links = 8;
+  repeated InnoText texts = 9;
+//  repeated InnoQuestion questions = 10; // TODO: implement
+}
+
+message InnoFile {
+  string id = 1;
+  string title = 2;
+  string url = 3;
+}
+
+message InnoImage {
+  string id = 1;
+  string title = 2;
+  string url = 3;
+}
+
+message InnoLink {
+  string id = 1;
+  string title = 2;
+  string url = 3;
+}
+
+message InnoResource {
+  string id = 1;
+  string service_entity_id = 2;
+  string tag = 3;
+}
+
+message InnoRole {
+  string id = 1;
+  string title = 2;
+}
+
+message InnoService {
+  string id = 1;
+  string title = 2;
+  string version = 3;
+  string organisation = 4;
+}
+
+message InnoServiceMethod {
+  string id = 1;
+  string service_id = 2;
+  string title = 3;
+}
+
+message InnoText {
+  string id = 1;
+  string title = 2;
+  string text = 3;
+}
+
+message InnoUser {
+  string uid = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  string phone = 5;
+  string main_role_id = 6;
+  repeated inno.model.InnoRole roles = 7;
+}

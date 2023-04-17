@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package inno.role;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoRoleService {
+  rpc ListInnoRoles(ListInnoRolesRequest) returns (ListInnoRolesResponse) {}
+  rpc GetInnoRole(GetInnoRoleRequest) returns (inno.model.InnoRole) {}
+  rpc CreateInnoRole(CreateInnoRoleRequest) returns (inno.model.InnoRole) {}
+  rpc UpdateInnoRole(UpdateInnoRoleRequest) returns (inno.model.InnoRole) {}
+  rpc DeleteInnoRole(DeleteInnoRoleRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoRolesRequest {}
+
+message ListInnoRolesResponse {
+  repeated inno.model.InnoRole inno_roles = 1;
+}
+
+message GetInnoRoleRequest {
+  string id = 1;
+}
+
+message CreateInnoRoleRequest {
+  string id = 1;
+  string title = 2;
+}
+
+message UpdateInnoRoleRequest {
+  inno.model.InnoRole inno_role = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoRoleRequest {
+  string id = 1;
+}

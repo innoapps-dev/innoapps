@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package inno.user;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoUserService {
+  rpc ListInnoUsers(ListInnoUsersRequest) returns (ListInnoUsersResponse) {}
+  rpc GetInnoUser(GetInnoUserRequest) returns (inno.model.InnoUser) {}
+  rpc CreateInnoUser(CreateInnoUserRequest) returns (inno.model.InnoUser) {}
+  rpc UpdateInnoUser(UpdateInnoUserRequest) returns (inno.model.InnoUser) {}
+  rpc DeleteInnoUser(DeleteInnoUserRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoUsersRequest {}
+
+message ListInnoUsersResponse {
+  repeated inno.model.InnoUser inno_users = 1;
+}
+
+message GetInnoUserRequest {
+  string uid = 1;
+}
+
+message CreateInnoUserRequest {
+  string uid = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  string main_role_id = 5;
+}
+
+message UpdateInnoUserRequest {
+  inno.model.InnoUser inno_user = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoUserRequest {
+  string uid = 1;
+}
+
+

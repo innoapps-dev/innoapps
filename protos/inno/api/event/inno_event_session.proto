@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package inno.event;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoEventSessionService {
+  rpc ListInnoEventSessions(ListInnoEventSessionsRequest) returns (ListInnoEventSessionsResponse) {}
+  rpc GetInnoEventSession(GetInnoEventSessionRequest) returns (inno.model.InnoEventSession) {}
+  rpc CreateInnoEventSession(CreateInnoEventSessionRequest) returns (inno.model.InnoEventSession) {}
+  rpc UpdateInnoEventSession(UpdateInnoEventSessionRequest) returns (inno.model.InnoEventSession) {}
+  rpc DeleteInnoEventSession(DeleteInnoEventSessionRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoEventSessionsRequest {
+  string inno_event_id = 1;
+}
+
+message ListInnoEventSessionsResponse {
+  repeated inno.model.InnoEventSession inno_event_sessions = 1;
+}
+
+message GetInnoEventSessionRequest {
+  string id = 1;
+}
+
+message CreateInnoEventSessionRequest {
+  string inno_event_id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp start_date_time = 4;
+  google.protobuf.Timestamp end_date_time = 5;
+}
+
+message UpdateInnoEventSessionRequest {
+  inno.model.InnoEventSession inno_event_session = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoEventSessionRequest {
+  string id = 1;
+}

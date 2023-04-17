@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7dfa7b71-9867-40da-9b49-3d8405514803" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../inno_link/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/google/protobuf/empty.pb.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/google/protobuf/empty.pbenum.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/google/protobuf/empty.pbjson.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/google/protobuf/timestamp.pb.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/google/protobuf/timestamp.pbenum.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/google/protobuf/timestamp.pbjson.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/inno/role/inno_role.pb.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/inno/role/inno_role.pbgrpc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/generated/inno/role/inno_role.pbjson.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/inno_role_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_core/lib/inno_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_core/lib/inno_core.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/inno_link.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/inno_link.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/database.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_core/lib/src/database.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pb.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbenum.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/generated/inno/role/inno_role.pbenum.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbgrpc.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/generated/inno/links/inno_links.pbjson.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/inno_link.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/inno_link_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/src/inno_link_database.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/inno_link_database.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_create_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/views/inno_link_create_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_detail_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/views/inno_link_detail_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_edit_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/views/inno_link_edit_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inno_link/lib/views/inno_link_list_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../inno_link/lib/src/views/inno_link_list_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/inno_role_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/inno_role_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/inno_role.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/inno_role.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/inno_role_base.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/inno_role_create_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/views/inno_role_create_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/inno_role_detail_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/views/inno_role_detail_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/inno_role_edit_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/views/inno_role_edit_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/inno_role_list_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/views/inno_role_list_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protos/inno/role/inno_role.proto" beforeDir="false" afterPath="$PROJECT_DIR$/protos/inno/role/inno_role.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tables/table.pgsql" beforeDir="false" afterPath="$PROJECT_DIR$/tables/table.pgsql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/inno_role_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/inno_role_test.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="2B3xvciRMbtCGBiMkCWc0FEMckN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Tests in inno_role" type="DartTestRunConfigurationType" factoryName="Dart Test">
+      <option name="filePath" value="$PROJECT_DIR$" />
+      <option name="scope" value="FOLDER" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7dfa7b71-9867-40da-9b49-3d8405514803" name="Changes" comment="" />
+      <created>1656148801895</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1656148801895</updated>
+    </task>
+    <servers />
+  </component>
+</project>

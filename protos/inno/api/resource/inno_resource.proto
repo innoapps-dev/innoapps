@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package inno.resource;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoResourceService {
+  rpc ListInnoResources(ListInnoResourcesRequest) returns (ListInnoResourcesResponse) {}
+  rpc GetInnoResource(GetInnoResourceRequest) returns (inno.model.InnoResource) {}
+  rpc CreateInnoResource(CreateInnoResourceRequest) returns (inno.model.InnoResource) {}
+  rpc UpdateInnoResource(UpdateInnoResourceRequest) returns (inno.model.InnoResource) {}
+  rpc DeleteInnoResource(DeleteInnoResourceRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoResourcesRequest {}
+
+message ListInnoResourcesResponse {
+  repeated inno.model.InnoResource inno_resources = 1;
+}
+
+message GetInnoResourceRequest {
+  string id = 1;
+}
+
+message CreateInnoResourceRequest {
+  string service_id = 1;
+}
+
+message UpdateInnoResourceRequest {
+  inno.model.InnoResource inno_resource = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoResourceRequest {
+  string id = 1;
+}

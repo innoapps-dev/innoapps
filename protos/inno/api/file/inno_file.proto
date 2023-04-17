@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package inno.file;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "inno/model/inno_model.proto";
+
+service InnoFileService {
+  rpc ListInnoFiles(ListInnoFilesRequest) returns (ListInnoFilesResponse) {}
+  rpc GetInnoFile(GetInnoFileRequest) returns (inno.model.InnoFile) {}
+  rpc CreateInnoFile(CreateInnoFileRequest) returns (inno.model.InnoFile) {}
+  rpc UpdateInnoFile(UpdateInnoFileRequest) returns (inno.model.InnoFile) {}
+  rpc DeleteInnoFile(DeleteInnoFileRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListInnoFilesRequest {}
+
+message ListInnoFilesResponse {
+  repeated inno.model.InnoFile inno_files = 1;
+}
+
+message GetInnoFileRequest {
+  string id = 1;
+}
+
+message CreateInnoFileRequest {
+  string title = 1;
+  string url = 2;
+}
+
+message UpdateInnoFileRequest {
+  inno.model.InnoFile inno_file = 1;
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteInnoFileRequest {
+  string id = 1;
+}
