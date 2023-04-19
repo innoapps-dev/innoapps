@@ -14,10 +14,7 @@ dependencies:
   openid_client: ^0.4.6
   protobuf: ^2.1.0
   fpdart: ^0.3.0
-  # TODO: Switch to pub when https://github.com/mockturtl/dotenv/pull/34 is merged
-  dotenv: 
-    git:
-      url: https://github.com/bettdouglas/dotenv.git
+  dotenv: ^4.0.1
   logging: ^1.1.0
 
   inno_model:
