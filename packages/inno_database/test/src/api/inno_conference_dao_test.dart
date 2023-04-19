@@ -36,7 +36,8 @@ void main() {
   });
 
   tearDown(() async {
-    await innoConferenceProviderDao.delete(id: innoConference.id);
+    await innoConferenceProviderDao.delete(id: innoConferenceProvider.id);
+    await innoConferenceDao.delete(id: innoConference.id);
   });
 
   test('can add ', () async {

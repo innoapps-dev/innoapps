@@ -1,6 +1,5 @@
 import 'package:dotenv/dotenv.dart';
 import 'package:postgres_pool/postgres_pool.dart';
-import 'package:fpdart/fpdart.dart';
 
 class InnoConnectionPool extends PgPool {
   InnoConnectionPool({

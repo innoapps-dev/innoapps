@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:inno_database/inno_database.dart';
 import 'package:test/test.dart';
 
@@ -50,11 +48,11 @@ void main() {
     eventSession = await eventSessionDao.insert(
       values: eventSession.asDbMap(eventId: event.id),
     );
-    print('Inserted');
   });
 
   tearDown(() async {
     await eventSessionDao.delete(id: eventSession.id);
+    await eventDao.delete(id: event.id);
   });
 
   test('can add ', () async {
@@ -92,7 +90,7 @@ void main() {
   });
   test('can select ', () async {
     final got = await eventSessionDao.select(
-      id: '3bbac0b9-c834-4ebe-83a5-5e5c65c7d3be',
+      id: eventSession.id,
     );
     expect(got, isNotNull);
   });
