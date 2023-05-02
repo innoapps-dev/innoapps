@@ -29,16 +29,11 @@ abstract class InnoDatabase {
         ''';
 
     _logger.info(sql);
-    print(sql);
 
     try {
       result = await connectionPool.query(sql);
-
-      if (result.isEmpty) {
-        throw PostgreSQLException('Record not found');
-      }
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
       rethrow;
     }
     return result;
@@ -59,19 +54,13 @@ abstract class InnoDatabase {
         ''';
 
     _logger.info(sql);
-    print(sql);
 
-    result = await connectionPool.query(sql);
-
-    // try {
-    //
-    //
-    //   if (result.isEmpty) {
-    //     throw PostgreSQLException('Record not found');
-    //   }
-    // } catch (e) {
-    //   print(e);
-    // }
+    try {
+      result = await connectionPool.query(sql);
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
+      rethrow;
+    }
     return result;
   }
 
@@ -89,20 +78,27 @@ abstract class InnoDatabase {
         ''';
 
     _logger.info(sql);
-    print(sql);
 
-    result = await connectionPool.query(sql, substitutionValues: {
-      'id': id,
-      'column': column,
-    });
+    try {
+      result = await connectionPool.query(
+        sql,
+        substitutionValues: {
+          'id': id,
+          'column': column,
+        },
+      );
 
-    if (result.isEmpty) {
-      throw PostgreSQLException('Record not found');
-    }
+      if (result.isEmpty) {
+        throw PostgreSQLException('Record not found');
+      }
 
-    row = result[0];
-    if (row.isEmpty) {
-      throw PostgreSQLException('Record not found');
+      row = result[0];
+      if (row.isEmpty) {
+        throw PostgreSQLException('Record not found. Postgresql row is empty');
+      }
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
+      rethrow;
     }
 
     return row;
@@ -116,17 +112,18 @@ abstract class InnoDatabase {
 
     String sql = '''
         INSERT INTO $schema.$tableName (${values.keys.join(',')})
-        VALUES (${values.values.map((e) => "'$e'").join(',')})
+        VALUES (${values.keys.map((e) => "@$e").join(',')})
         RETURNING $primaryKeyColumn
         ''';
 
     _logger.info(sql);
-    print(sql);
 
     List<List<dynamic>> result;
 
-    //TODO: do we need to use substitution values?
-    result = await connectionPool.query(sql);
+    result = await connectionPool.query(
+      sql,
+      substitutionValues: values,
+    );
 
     var returnedRow = result[0];
 
@@ -148,23 +145,9 @@ abstract class InnoDatabase {
   }) async {
     var updatesList = <String>[];
 
-    // INPUT
-    // updates:
-    //  updates['name'] = 'math01'
-    //  updates['department'] = 'mathematics'
-
-    // OUTPUT for SET clause
-    // name = @name, department = @department
-
-    var substitutionValues = values;
-
     values.forEach((key, value) {
       updatesList.add('$key=@$key');
     });
-
-    //UPDATE unitech.unitech_application_course
-    //SET name = 'math01', department = 'mathematics'
-    //WHERE id= 12341234
 
     var updatesFormatted = updatesList.join(', ');
 
@@ -175,16 +158,11 @@ abstract class InnoDatabase {
         ''';
 
     _logger.info(sql);
-    print(sql);
 
     try {
-      // List<List<dynamic>> result;
-      //
-      // result = await connectionPool.query(sql);
       await connectionPool.query(sql, substitutionValues: values);
-    } catch (e) {
-      print(e);
-      // TODO(Ask): We should also rethrow here
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
       rethrow;
     }
   }
@@ -199,16 +177,14 @@ abstract class InnoDatabase {
         ''';
 
     _logger.info(sql);
-    print(sql);
 
     try {
       await connectionPool.query(
         sql,
         substitutionValues: {'id': id},
       );
-    } catch (e) {
-      print(e);
-      //TODO(Ask): We should also rethrow here
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
       rethrow;
     }
   }

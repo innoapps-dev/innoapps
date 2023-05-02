@@ -27,23 +27,16 @@ abstract class InnoSingleKeyDaoBase<T> extends InnoDatabase {
 
     try {
       id = await insertQuerySingleKey(
-          values: values, primaryKeyColumn: primaryKeyColumn);
+        values: values,
+        primaryKeyColumn: primaryKeyColumn,
+      );
 
       if (id.isEmpty) {
         throw PostgreSQLException('Failed to insert row, id is empty');
-        // throw GrpcError.unknown(
-        //   'Empty id while executing insert inno file',
-        // );
       }
     } on PostgreSQLException catch (e) {
       print(e);
       rethrow;
-      // if (e.code == '23505') {
-      //   throw GrpcError.alreadyExists(e.message);
-      // }
-      // throw GrpcError.unknown(
-      //   e.message,
-      // );
     }
 
     return await select(id: id);
@@ -53,30 +46,18 @@ abstract class InnoSingleKeyDaoBase<T> extends InnoDatabase {
     required Map<String, dynamic> values,
     required String id,
   }) async {
+    if (id.isEmpty) {
+      throw PostgreSQLException('Failed to update row, id is empty');
+    }
     try {
       await updateQuerySingleKey(
         values: values,
         primaryKeyColumn: primaryKeyColumn,
         id: id,
       );
-
-      if (id.isEmpty) {
-        //TODO: add error control
-        throw PostgreSQLException('Failed to insert row, id is empty');
-        // throw GrpcError.unknown(
-        //   'Empty id while executing insert inno file',
-        // );
-      }
     } on PostgreSQLException catch (e) {
       print(e);
-      //TODO: add error control
       rethrow;
-      // if (e.code == '23505') {
-      //   throw GrpcError.alreadyExists(e.message);
-      // }
-      // throw GrpcError.unknown(
-      //   e.message,
-      // );
     }
 
     return await select(id: id);

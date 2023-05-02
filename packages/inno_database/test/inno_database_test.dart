@@ -13,23 +13,28 @@ void main() async {
   group('InnoFileDao', () {
     late InnoFile innoFile;
     late InnoFileDao fileDao;
-    setUpAll(() async {
+
+    setUp(() async {
       fileDao = InnoFileDao(connectionPool: connectionPool);
       final values = {
-        InnoFileDao.columnId: 'test_id',
+        InnoFileDao.columnId: faker.uuid(),
         InnoFileDao.columnTitle: 'File Title',
         InnoFileDao.columnUrl: 'https://www.file.com/',
       };
-
       innoFile = await fileDao.insert(values: values);
     });
+
+    tearDown(() async {
+      await fileDao.delete(id: innoFile.id);
+    });
+
     test('InnoFile > insert', () async {
-      addTearDown(() => fileDao.delete(id: innoFile.id));
       expect(innoFile.title, 'File Title');
     });
+
     test('InnoFile > select', () async {
-      InnoFile innoFile = await fileDao.select(id: 'test_id');
-      expect(innoFile.title, 'File Title');
+      final got = await fileDao.select(id: innoFile.id);
+      expect(got.title, innoFile.title);
     });
 
     test('InnoFile > update > title.', () async {
@@ -37,8 +42,8 @@ void main() async {
         InnoFileDao.columnTitle: 'File Title2',
       };
 
-      InnoFile innoFile = await fileDao.update(values: values, id: 'test_id');
-      expect(innoFile.title, 'File Title2');
+      final updated = await fileDao.update(values: values, id: innoFile.id);
+      expect(updated.title, 'File Title2');
     });
 
     test('InnoFile > update > url', () async {
@@ -46,8 +51,8 @@ void main() async {
         InnoFileDao.columnUrl: 'https://www.file2.com/',
       };
 
-      InnoFile innoFile = await fileDao.update(values: values, id: 'test_id');
-      expect(innoFile.url, 'https://www.file2.com/');
+      final updated = await fileDao.update(values: values, id: innoFile.id);
+      expect(updated.url, 'https://www.file2.com/');
     });
 
     test('InnoFile > update > title and url', () async {
@@ -56,18 +61,18 @@ void main() async {
         InnoFileDao.columnUrl: 'https://www.file3.com/',
       };
 
-      InnoFile innoFile = await fileDao.update(values: values, id: 'test_id');
-      expect(innoFile.title, 'File Title3');
-      expect(innoFile.url, 'https://www.file3.com/');
+      final updated = await fileDao.update(values: values, id: innoFile.id);
+      expect(updated.title, 'File Title3');
+      expect(updated.url, 'https://www.file3.com/');
     });
 
     test('InnoFile > delete', () async {
-      await fileDao.delete(id: 'test_id');
+      await fileDao.delete(id: innoFile.id);
 
-      InnoFile innoFile = await fileDao.select(id: 'test_id');
-
-      expect(innoFile,
-          null); // TODO: How to test a delete function? > add an catch exception
+      expect(
+        () async => await fileDao.select(id: innoFile.id),
+        throwsA(isA<PostgreSQLException>()),
+      );
     });
   });
 
@@ -81,17 +86,20 @@ void main() async {
     });
 
     setUp(() async {
-      uid = 'test_uid';
+      uid = faker.uuid();
       final values = {
         InnoUserDao.columnUid: uid,
         InnoUserDao.columnFirstName: 'fn',
         InnoUserDao.columnLastName: 'ln',
         InnoUserDao.columnEmail: 'email@domain.com',
+        InnoUserDao.columnMainRoleId: 'applicant',
       };
 
       innoUser = await userDao.insert(values: values);
       addTearDown(() async => await userDao.delete(id: uid));
     });
+
+    tearDown(() async => await userDao.delete(id: uid));
 
     test('InnoUser > insert', () async {
       expect(innoUser, isNotNull);
@@ -121,11 +129,9 @@ void main() async {
       await userDao.delete(id: uid);
 
       expectLater(
-        () => userDao.select(id: uid),
-        completion(throwsA(isA<Exception>)),
+        () async => await userDao.select(id: uid),
+        throwsA(isA<PostgreSQLException>()),
       );
-
-      // expect(innoFile, null);// TODO: How to test a delete function?
     });
   });
 }

@@ -36,17 +36,17 @@ void main() {
   });
 
   tearDown(() async {
-    await innoConferenceProviderDao.delete(id: innoConferenceProvider.id);
     await innoConferenceDao.delete(id: innoConference.id);
+    await innoConferenceProviderDao.delete(id: innoConferenceProvider.id);
   });
 
   test('can add ', () async {
     expect(innoConference, isNotNull);
   });
   test('can delete ', () async {
-    await innoConferenceProviderDao.delete(id: innoConference.id);
+    await innoConferenceDao.delete(id: innoConference.id);
     expect(
-      () async => await innoConferenceProviderDao.select(
+      () async => await innoConferenceDao.select(
         id: innoConference.id,
       ),
       throwsA(isA<PostgreSQLException>()),
@@ -54,19 +54,19 @@ void main() {
   });
   test('can update ', () async {
     final newTitle = faker.uuid();
-    await innoConferenceProviderDao.update(
+    await innoConferenceDao.update(
       values: {
         InnoConferenceDao.columnTitle: newTitle,
       },
       id: innoConference.id,
     );
-    final updated = await innoConferenceProviderDao.select(
+    final updated = await innoConferenceDao.select(
       id: innoConference.id,
     );
     expect(updated.title, equals(newTitle));
   });
   test('can select ', () async {
-    final got = await innoConferenceProviderDao.select(
+    final got = await innoConferenceDao.select(
       id: innoConference.id,
     );
     expect(got, innoConference);
