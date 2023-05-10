@@ -145,6 +145,16 @@ abstract class InnoDatabase {
   }) async {
     var updatesList = <String>[];
 
+    if (id.isEmpty) {
+      throw PostgreSQLException('Failed to update row, id is empty');
+    }
+
+    if (values.isEmpty) {
+      throw PostgreSQLException(
+        'Cannot send update with no values. Ensure that `Map<String, dynamic> values` is not empty',
+      );
+    }
+
     values.forEach((key, value) {
       updatesList.add('$key=@$key');
     });

@@ -46,9 +46,6 @@ abstract class InnoSingleKeyDaoBase<T> extends InnoDatabase {
     required Map<String, dynamic> values,
     required String id,
   }) async {
-    if (id.isEmpty) {
-      throw PostgreSQLException('Failed to update row, id is empty');
-    }
     try {
       await updateQuerySingleKey(
         values: values,
