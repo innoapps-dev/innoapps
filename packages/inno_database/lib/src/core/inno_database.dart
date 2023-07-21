@@ -49,19 +49,88 @@ abstract class InnoDatabase {
     String sql = '''
         SELECT ${columns.join(',')} 
         FROM $schema.$tableName
-        WHERE $filterColumn='$filterValue'
-        ORDER BY $orderByColumn
+        WHERE $filterColumn=@filterValue
+        ORDER BY @orderByColumn
         ''';
 
     _logger.info(sql);
 
     try {
-      result = await connectionPool.query(sql);
+      result = await connectionPool.query(
+        sql,
+        substitutionValues: {
+          'filterValue': filterValue,
+          'orderByColumn': orderByColumn,
+        },
+      );
     } catch (e, st) {
       _logger.shout(e.runtimeType, e, st);
       rethrow;
     }
     return result;
+  }
+
+  Future<PostgreSQLResult> selectGreaterThanQuery({
+    required String filterColumn,
+    required dynamic filterValue,
+    required String orderByColumn,
+  }) async {
+    late PostgreSQLResult result;
+
+    String sql = '''
+        SELECT ${columns.join(',')} 
+        FROM $schema.$tableName
+        WHERE $filterColumn>@filterValue
+        ORDER BY @orderByColumn
+        ''';
+
+    _logger.info(sql);
+
+    try {
+      result = await connectionPool.query(
+        sql,
+        substitutionValues: {
+          'filterValue': filterValue,
+          'orderByColumn': orderByColumn,
+        },
+      );
+      return result;
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
+      rethrow;
+    }
+  }
+
+  Future<PostgreSQLResult> selectLessThanQuery({
+    required String filterColumn,
+    required dynamic filterValue,
+    required String orderByColumn,
+  }) async {
+    late PostgreSQLResult result;
+
+    String sql = '''
+        SELECT ${columns.join(',')} 
+        FROM $schema.$tableName
+        WHERE $filterColumn<@filterValue
+        ORDER BY @orderByColumn
+        ''';
+
+    _logger.info(sql);
+
+    try {
+      result = await connectionPool.query(
+        sql,
+        substitutionValues: {
+          'filterValue': filterValue,
+          'orderByColumn': orderByColumn,
+          'schema': schema,
+        },
+      );
+      return result;
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
+      rethrow;
+    }
   }
 
   Future<PostgreSQLResultRow> selectQuerySingleKey({
@@ -104,12 +173,10 @@ abstract class InnoDatabase {
     return row;
   }
 
-  Future<String> insertQuerySingleKey({
+  Future<dynamic> insertQuerySingleKey({
     required Map<String, dynamic> values,
     required String primaryKeyColumn,
   }) async {
-    String insertedId = '';
-
     String sql = '''
         INSERT INTO $schema.$tableName (${values.keys.join(',')})
         VALUES (${values.keys.map((e) => "@$e").join(',')})
@@ -133,9 +200,7 @@ abstract class InnoDatabase {
       );
     }
 
-    insertedId = returnedRow[0];
-
-    return insertedId;
+    return returnedRow[0];
   }
 
   Future<void> updateQuerySingleKey({
