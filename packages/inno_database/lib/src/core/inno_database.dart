@@ -1,5 +1,6 @@
 import 'package:inno_database/inno_database.dart';
 import 'package:logging/logging.dart';
+import 'package:postgres/postgres_v3_experimental.dart' as v3;
 
 //DAO: data access object
 
@@ -10,11 +11,13 @@ abstract class InnoDatabase {
 
   final InnoConnectionPool connectionPool;
   late Logger _logger;
+  late Future<v3.PgConnection> v3ConnectionPool;
 
   InnoDatabase({
     required this.connectionPool,
   }) {
     _logger = Logger(runtimeType.toString());
+    v3ConnectionPool = connectionPool.v3ConnectionPool;
   }
 
   Future<PostgreSQLResult> selectAllQuery({
@@ -37,6 +40,50 @@ abstract class InnoDatabase {
       rethrow;
     }
     return result;
+  }
+
+  Future<PostgreSQLResult> joinAllQuery({
+    required String otherTableSchema,
+    required String otherTable,
+    required String otherTableJoinColumn,
+    required List<String> otherTableColumns,
+    required String thisTableColumn,
+    required String orderByColumn,
+  }) async {
+    final thisClassColumns = columns.map((e) => '$schema.$tableName.$e');
+    final otherTableColumnsFormatted =
+        otherTableColumns.map((e) => '$otherTableSchema.$otherTable.$e');
+
+    final sql = '''
+SELECT ${thisClassColumns.join(', ')}, ${otherTableColumnsFormatted.join(', ')}
+FROM $schema.$tableName
+INNER JOIN $schema.$otherTable
+ON $schema.$tableName.$thisTableColumn = $schema.$otherTable.$otherTableJoinColumn
+ORDER BY $schema.$tableName.$orderByColumn
+''';
+
+    _logger.info(sql);
+
+    late PostgreSQLResult result;
+
+    try {
+      result = await connectionPool.query(sql);
+    } catch (e, st) {
+      _logger.shout(e.runtimeType, e, st);
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<PostgreSQLResult> joinAllQueryWhere({
+    required String otherTable,
+    required String otherTableColumn,
+    required String thisTableColumn,
+    required String orderByColumn,
+    required String whereColumn,
+    required dynamic whereValue,
+  }) async {
+    throw UnimplementedError();
   }
 
   Future<PostgreSQLResult> selectByQuery({

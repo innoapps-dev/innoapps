@@ -2,6 +2,8 @@ import 'package:inno_database/inno_database.dart';
 import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
+import '../../test_utils.dart';
+
 void main() {
   late InnoConnectionPool connectionPool;
 
@@ -21,31 +23,24 @@ void main() {
   });
 
   group('InnoDatabase', () {
-    late TempUserDatabase innoDatabase;
+    late TempUserDatabase innoUserDatabase;
+    late TempEventsDatabase innoEventsDatabase;
 
     setUpAll(
-      () => innoDatabase = TempUserDatabase(connectionPool: connectionPool),
+      () {
+        innoUserDatabase = TempUserDatabase(connectionPool: connectionPool);
+        innoEventsDatabase = TempEventsDatabase(connectionPool: connectionPool);
+      },
     );
 
     setUp(() async {
-      final response = await connectionPool.execute(
-        '''
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  phone TEXT NULL,
-  main_role_id TEXT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NULL
-);''',
-      );
-      expect(response, equals(0));
+      await innoUserDatabase.setup();
+      await innoEventsDatabase.setup();
     });
 
     tearDown(() async {
-      await connectionPool.execute('''DROP TABLE users;''');
+      await innoEventsDatabase.tearDown();
+      await innoUserDatabase.tearDown();
     });
 
     test('can insert', () async {
@@ -54,15 +49,56 @@ CREATE TABLE users (
         TempUserDatabase.columnLastName: 'Last Name',
         TempUserDatabase.columnEmail: 'u@gmail.com',
       };
-      final result = await innoDatabase.insertQuerySingleKey(
+      final result = await innoUserDatabase.insertQuerySingleKey(
         values: values,
         primaryKeyColumn: TempUserDatabase.columnId,
       );
       expect(result, isA<int>());
     });
 
+    test('can run join query', () async {
+      final result = await innoUserDatabase.joinAllQuery(
+        otherTableSchema: 'public',
+        otherTable: 'user_events',
+        otherTableJoinColumn: 'user_id',
+        otherTableColumns: innoEventsDatabase.columns,
+        thisTableColumn: TempUserDatabase.columnId,
+        orderByColumn: TempUserDatabase.columnId,
+      );
+      expect(result, isNotNull);
+      final values = {
+        TempUserDatabase.columnFirstName: 'First Name',
+        TempUserDatabase.columnLastName: 'Last Name',
+        TempUserDatabase.columnEmail: 'u@gmail.com',
+      };
+      final userId = await innoUserDatabase.insertQuerySingleKey(
+        values: values,
+        primaryKeyColumn: TempUserDatabase.columnId,
+      );
+      expect(userId, isA<int>());
+      final eventValues = {
+        TempEventsDatabase.columnUserId: userId,
+        TempEventsDatabase.columnTitle: 'Title',
+      };
+      final eventId = await innoEventsDatabase.insertQuerySingleKey(
+        values: eventValues,
+        primaryKeyColumn: TempEventsDatabase.columnId,
+      );
+      expect(eventId, isA<int>());
+      final result2 = await innoUserDatabase.joinAllQuery(
+        otherTableSchema: 'public',
+        otherTable: 'user_events',
+        otherTableJoinColumn: 'user_id',
+        otherTableColumns: innoEventsDatabase.columns,
+        thisTableColumn: TempUserDatabase.columnId,
+        orderByColumn: TempUserDatabase.columnId,
+      );
+      expect(result2, isNotEmpty);
+      print(result2.first.toColumnMap());
+    });
+
     test('can select greatorThan', () async {
-      var result = await innoDatabase.selectGreaterThanQuery(
+      var result = await innoUserDatabase.selectGreaterThanQuery(
         filterColumn: TempUserDatabase.columnId,
         filterValue: 0,
         orderByColumn: TempUserDatabase.columnId,
@@ -73,11 +109,11 @@ CREATE TABLE users (
         TempUserDatabase.columnLastName: 'Last Name',
         TempUserDatabase.columnEmail: 'u@gmail.com',
       };
-      await innoDatabase.insertQuerySingleKey(
+      await innoUserDatabase.insertQuerySingleKey(
         values: values,
         primaryKeyColumn: TempUserDatabase.columnId,
       );
-      result = await innoDatabase.selectGreaterThanQuery(
+      result = await innoUserDatabase.selectGreaterThanQuery(
         filterColumn: TempUserDatabase.columnId,
         filterValue: 0,
         orderByColumn: TempUserDatabase.columnId,
@@ -94,7 +130,7 @@ CREATE TABLE users (
       'selectGreatorThanQuery returns values greator than DateTime',
       () async {
         final now = DateTime.now();
-        final result = await innoDatabase.selectGreaterThanQuery(
+        final result = await innoUserDatabase.selectGreaterThanQuery(
           filterColumn: TempUserDatabase.columnCreatedAt,
           filterValue: now,
           orderByColumn: TempUserDatabase.columnId,
@@ -105,11 +141,11 @@ CREATE TABLE users (
           TempUserDatabase.columnLastName: 'Last Name',
           TempUserDatabase.columnEmail: 'u@gmail.com',
         };
-        await innoDatabase.insertQuerySingleKey(
+        await innoUserDatabase.insertQuerySingleKey(
           values: values,
           primaryKeyColumn: TempUserDatabase.columnId,
         );
-        final result2 = await innoDatabase.selectGreaterThanQuery(
+        final result2 = await innoUserDatabase.selectGreaterThanQuery(
           filterColumn: TempUserDatabase.columnCreatedAt,
           filterValue: now.subtract(Duration(days: 1)),
           orderByColumn: TempUserDatabase.columnId,
@@ -126,7 +162,7 @@ CREATE TABLE users (
     test(
       'selectGreatorThanQuery returns values greator than int',
       () async {
-        final result = await innoDatabase.selectGreaterThanQuery(
+        final result = await innoUserDatabase.selectGreaterThanQuery(
           filterColumn: TempUserDatabase.columnId,
           filterValue: 0,
           orderByColumn: TempUserDatabase.columnId,
@@ -137,11 +173,11 @@ CREATE TABLE users (
           TempUserDatabase.columnLastName: 'Last Name',
           TempUserDatabase.columnEmail: 'u@gmail.com',
         };
-        await innoDatabase.insertQuerySingleKey(
+        await innoUserDatabase.insertQuerySingleKey(
           values: values,
           primaryKeyColumn: TempUserDatabase.columnId,
         );
-        final result2 = await innoDatabase.selectGreaterThanQuery(
+        final result2 = await innoUserDatabase.selectGreaterThanQuery(
           filterColumn: TempUserDatabase.columnId,
           filterValue: 0,
           orderByColumn: TempUserDatabase.columnId,
@@ -164,19 +200,19 @@ CREATE TABLE users (
           TempUserDatabase.columnEmail: 'u@gmail.com',
           TempUserDatabase.columnCreatedAt: now,
         };
-        await innoDatabase.insertQuerySingleKey(
+        await innoUserDatabase.insertQuerySingleKey(
           values: values,
           primaryKeyColumn: TempUserDatabase.columnId,
         );
 
-        final result2 = await innoDatabase.selectLessThanQuery(
+        final result2 = await innoUserDatabase.selectLessThanQuery(
           filterColumn: TempUserDatabase.columnCreatedAt,
           filterValue: now.subtract(Duration(days: 1)),
           orderByColumn: TempUserDatabase.columnId,
         );
         expect(result2, hasLength(0));
 
-        final lessThanNow = await innoDatabase.selectLessThanQuery(
+        final lessThanNow = await innoUserDatabase.selectLessThanQuery(
           filterColumn: TempUserDatabase.columnCreatedAt,
           filterValue: now.add(Duration(days: 1)),
           orderByColumn: TempUserDatabase.columnId,
@@ -201,11 +237,11 @@ CREATE TABLE users (
           TempUserDatabase.columnCreatedAt: now,
         };
 
-        await innoDatabase.insertQuerySingleKey(
+        await innoUserDatabase.insertQuerySingleKey(
           values: values,
           primaryKeyColumn: TempUserDatabase.columnId,
         );
-        await innoDatabase.insertQuerySingleKey(
+        await innoUserDatabase.insertQuerySingleKey(
           values: {
             TempUserDatabase.columnFirstName: 'FN3',
             TempUserDatabase.columnLastName: 'LN3',
@@ -214,7 +250,7 @@ CREATE TABLE users (
           },
           primaryKeyColumn: TempUserDatabase.columnId,
         );
-        await innoDatabase.insertQuerySingleKey(
+        await innoUserDatabase.insertQuerySingleKey(
           values: {
             TempUserDatabase.columnFirstName: 'FN3',
             TempUserDatabase.columnLastName: 'LN3',
@@ -224,20 +260,20 @@ CREATE TABLE users (
           primaryKeyColumn: TempUserDatabase.columnId,
         );
 
-        final result2 = await innoDatabase.selectLessThanQuery(
+        final result2 = await innoUserDatabase.selectLessThanQuery(
           filterColumn: TempUserDatabase.columnId,
           filterValue: 0,
           orderByColumn: TempUserDatabase.columnId,
         );
         expect(result2, hasLength(0));
-        final lessThan3 = await innoDatabase.selectLessThanQuery(
+        final lessThan3 = await innoUserDatabase.selectLessThanQuery(
           filterColumn: TempUserDatabase.columnId,
           filterValue: 3,
           orderByColumn: TempUserDatabase.columnId,
         );
         expect(lessThan3, hasLength(2));
 
-        final lessThan2 = await innoDatabase.selectLessThanQuery(
+        final lessThan2 = await innoUserDatabase.selectLessThanQuery(
           filterColumn: TempUserDatabase.columnId,
           filterValue: 2,
           orderByColumn: TempUserDatabase.columnId,
@@ -251,42 +287,123 @@ CREATE TABLE users (
     );
 
     test('selectAllQuery', () async {
-      final result = await innoDatabase.selectAllQuery(
+      final result = await innoUserDatabase.selectAllQuery(
         orderByColumn: TempUserDatabase.columnId,
       );
       expect(result, isNotNull);
       expect(result, hasLength(0));
     });
+
+    test('can get insertsStream', () async {
+      final insertsStream =
+          (await innoUserDatabase.insertsStream()).asBroadcastStream();
+      final user1 = ('User 1', 'Last Name', 'user1@gmail.com');
+      final user2 = ('User 2', 'Last Name', 'user2@gmail.com');
+      final user3 = ('User 3', 'Last Name', 'user3@gmail.com');
+      final users = [user1, user2, user3];
+
+      final firstNameInserts = insertsStream
+          .map((event) => event[TempUserDatabase.columnFirstName])
+          .cast<String>();
+
+      expect(
+        firstNameInserts,
+        emitsInOrder([user1.$1, user2.$1, user3.$1]),
+      );
+
+      for (var user in users) {
+        await innoUserDatabase.insertQuerySingleKey(
+          values: {
+            TempUserDatabase.columnFirstName: user.$1,
+            TempUserDatabase.columnLastName: user.$2,
+            TempUserDatabase.columnEmail: user.$3,
+          },
+          primaryKeyColumn: TempUserDatabase.columnId,
+        );
+      }
+    });
+
+    test('can get rowUpdatesStream', () async {
+      final user1 = ('User 1', 'Last Name', 'user1@gmail.com');
+      final user2 = ('User 2', 'Last Name', 'user2@gmail.com');
+      final user1Id = await innoUserDatabase.insertQuerySingleKey(
+        values: {
+          TempUserDatabase.columnFirstName: user1.$1,
+          TempUserDatabase.columnLastName: user1.$2,
+          TempUserDatabase.columnEmail: user1.$3,
+        },
+        primaryKeyColumn: TempUserDatabase.columnId,
+      );
+      final user2Id = await innoUserDatabase.insertQuerySingleKey(
+        values: {
+          TempUserDatabase.columnFirstName: user2.$1,
+          TempUserDatabase.columnLastName: user2.$2,
+          TempUserDatabase.columnEmail: user2.$3,
+        },
+        primaryKeyColumn: TempUserDatabase.columnId,
+      );
+      final user1UpdateStream = (await innoUserDatabase.rowUpdatesStream(
+        id: user1Id,
+      ))
+          .map((event) => event[TempUserDatabase.columnFirstName])
+          .cast<String>();
+      final user2UpdateStream = (await innoUserDatabase.rowUpdatesStream(
+        id: user2Id,
+      ))
+          .map((event) => event[TempUserDatabase.columnFirstName])
+          .cast<String>();
+      final user2ClondedUpdateStream = (await innoUserDatabase.rowUpdatesStream(
+        id: user2Id,
+      ))
+          .map((event) => event[TempUserDatabase.columnFirstName])
+          .cast<String>();
+      expect(user1UpdateStream, emitsInOrder(['New Name']));
+      expect(user2UpdateStream, emitsInOrder(['New Name2']));
+      expect(user2ClondedUpdateStream, emitsInOrder(['New Name2']));
+      await innoUserDatabase.update(
+        values: {
+          TempUserDatabase.columnFirstName: 'New Name',
+        },
+        id: '$user1Id',
+      );
+      await innoUserDatabase.update(
+        values: {
+          TempUserDatabase.columnFirstName: 'New Name2',
+        },
+        id: '$user2Id',
+      );
+    });
+
+    test('can get rowDeletesStream', () async {
+      final userDeletesStream = await innoUserDatabase.deletesStream();
+      final user1 = ('User 1', 'Last Name', 'user1@gmail.com');
+      final user2 = ('User 2', 'Last Name', 'user2@gmail.com');
+      final user3 = ('User 3', 'Last Name', 'user3@gmail.com');
+      final users = [user1, user2, user3];
+
+      final ids = [];
+
+      for (var user in users) {
+        ids.add(
+          await innoUserDatabase.insertQuerySingleKey(
+            values: {
+              TempUserDatabase.columnFirstName: user.$1,
+              TempUserDatabase.columnLastName: user.$2,
+              TempUserDatabase.columnEmail: user.$3,
+            },
+            primaryKeyColumn: TempUserDatabase.columnId,
+          ),
+        );
+      }
+      final idsReversed = ids.reversed.toList();
+
+      expect(
+        userDeletesStream,
+        emitsInOrder(idsReversed.map((e) => '$e')),
+      );
+      for (var id in idsReversed) {
+        await innoUserDatabase.delete(id: '$id');
+      }
+    });
   });
-}
-
-class TempUserDatabase extends InnoDatabase {
-  TempUserDatabase({required super.connectionPool});
-
-  static String get columnId => 'id';
-  static String get columnFirstName => 'first_name';
-  static String get columnLastName => 'last_name';
-  static String get columnEmail => 'email';
-  static String get columnPhone => 'phone';
-  static String get columnMainRoleId => 'main_role_id';
-  static String get columnCreatedAt => 'created_at';
-  static String get columnUpdatedAt => 'updated_at';
-
-  @override
-  List<String> get columns => [
-        'id',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'main_role_id',
-        'created_at',
-        'updated_at',
-      ];
-
-  @override
-  String get schema => 'public';
-
-  @override
-  String get tableName => 'users';
 }

@@ -1,13 +1,14 @@
 import 'package:dotenv/dotenv.dart';
 import 'package:postgres_pool/postgres_pool.dart';
+import 'package:postgres/postgres_v3_experimental.dart' as v3;
 
 class InnoConnectionPool extends PgPool {
   InnoConnectionPool({
-    required String host,
-    required int port,
-    required String database,
-    required String username,
-    required String password,
+    required this.host,
+    required this.port,
+    required this.database,
+    required this.username,
+    required this.password,
   }) : super(
           PgEndpoint(
             host: host,
@@ -20,6 +21,11 @@ class InnoConnectionPool extends PgPool {
             ..maxConnectionAge = Duration(hours: 1)
             ..concurrency = 4,
         );
+  final String host;
+  final int port;
+  final String database;
+  final String username;
+  final String password;
 
   // static final conn = PostgreSQLConnection(ip, 5432, database,
   //     username: username, password: password);
@@ -75,4 +81,20 @@ class InnoConnectionPool extends PgPool {
       password: password,
     );
   }
+
+  Future<v3.PgConnection> get v3ConnectionPool => v3.PgConnection.open(
+        v3.PgEndpoint(
+          database: database,
+          host: host,
+          password: password,
+          port: port,
+          username: username,
+        ),
+        sessionSettings: v3.PgSessionSettings(
+          onBadSslCertificate: (p0) {
+            print('onBadSslCertificate');
+            return false;
+          },
+        ),
+      );
 }

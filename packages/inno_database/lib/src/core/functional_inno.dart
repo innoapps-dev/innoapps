@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 
 //DAO: data access object
 
-abstract class InnoDatabase {
+abstract class FunctionalInnoDatabase {
   abstract final String schema;
   abstract final String tableName;
   abstract final List<String> columns;
@@ -12,7 +12,7 @@ abstract class InnoDatabase {
   final InnoConnectionPool connectionPool;
   late Logger _logger;
 
-  InnoDatabase({
+  FunctionalInnoDatabase({
     required this.connectionPool,
   }) {
     _logger = Logger(runtimeType.toString());
