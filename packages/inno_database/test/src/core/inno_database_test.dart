@@ -1,5 +1,4 @@
 import 'package:inno_database/inno_database.dart';
-import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';
@@ -11,10 +10,10 @@ void main() {
     connectionPool = InnoConnectionPool.fromEnvironmentVariables(
       envFilePath: '.env',
     );
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((record) {
-      print(record.message);
-    });
+    // Logger.root.level = Level.ALL;
+    // Logger.root.onRecord.listen((record) {
+    //   print(record.message);
+    // });
   });
 
   test('can connect to database', () async {
@@ -294,7 +293,7 @@ void main() {
       expect(result, hasLength(0));
     });
 
-    test('can get insertsStream', () async {
+    (test('can get insertsStream', () async {
       final insertsStream =
           (await innoUserDatabase.insertsStream()).asBroadcastStream();
       final user1 = ('User 1', 'Last Name', 'user1@gmail.com');
@@ -304,7 +303,8 @@ void main() {
 
       final firstNameInserts = insertsStream
           .map((event) => event[TempUserDatabase.columnFirstName])
-          .cast<String>();
+          .cast<String>()
+          .asBroadcastStream();
 
       expect(
         firstNameInserts,
@@ -321,7 +321,7 @@ void main() {
           primaryKeyColumn: TempUserDatabase.columnId,
         );
       }
-    });
+    }));
 
     test('can get rowUpdatesStream', () async {
       final user1 = ('User 1', 'Last Name', 'user1@gmail.com');

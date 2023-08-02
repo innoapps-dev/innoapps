@@ -70,9 +70,9 @@ abstract class InnoSingleKeyDaoBase<T> extends InnoDatabase {
   }
 
   Future<Stream<T>> insertsStream() async {
-    final notifierFunctionName = '${schema}_${tableName}inserts_function';
-    final notifierChannel = '${schema}_${tableName}inserts_channel';
-    final triggerName = '$schema.{$tableName}_inserts_trigger';
+    final notifierFunctionName = '${schema}_${tableName}_inserts_function';
+    final notifierChannel = '${schema}_${tableName}_inserts_channel';
+    final triggerName = '${schema}_${tableName}_inserts_trigger';
     final createTableInsertFunction = '''
 CREATE OR REPLACE FUNCTION $notifierFunctionName() 
   RETURNS TRIGGER
@@ -84,7 +84,6 @@ CREATE OR REPLACE FUNCTION $notifierFunctionName()
   END;
 \$\$;
 ''';
-    print(createTableInsertFunction);
     final createTableInsertsTrigger = '''
 CREATE TRIGGER $triggerName
 AFTER INSERT
@@ -92,14 +91,16 @@ on $schema.$tableName
 FOR EACH ROW
 EXECUTE PROCEDURE $notifierFunctionName();
 ''';
-    print(createTableInsertsTrigger);
+
     final connection = await v3ConnectionPool;
 
-    await connection.execute(PgSql(createTableInsertFunction));
-    await connection.execute(PgSql(createTableInsertsTrigger));
     await connection.execute(
       PgSql('DROP TRIGGER IF EXISTS $triggerName ON $schema.$tableName;'),
     );
+
+    await connection.execute(PgSql(createTableInsertFunction));
+    await connection.execute(PgSql(createTableInsertsTrigger));
+
     await connection.execute('LISTEN $notifierChannel;');
     return connection.channels[notifierChannel].asyncMap((id) async {
       final result = await select(id: id);
@@ -135,6 +136,7 @@ CREATE OR REPLACE FUNCTION $notifierFunctionName()
   EXECUTE FUNCTION $notifierFunctionName();
 
   ''';
+
     final connection = await v3ConnectionPool;
 
     await connection.execute(
