@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:inno_database/inno_database.dart';
 import 'package:postgres/postgres_v3_experimental.dart';
+import 'package:crypto/crypto.dart';
 
 abstract class InnoSingleKeyDaoBase<T> extends InnoDatabase {
   abstract final String primaryKeyColumn;
@@ -111,22 +114,37 @@ EXECUTE PROCEDURE $notifierFunctionName();
   Future<Stream<T>> rowUpdatesStream({
     required dynamic id,
   }) async {
-    final notifierFunctionName = '${schema}_$tableName${id}_updates_function';
-    final notifierChannel = '${schema}_$tableName${id}_updates_channel';
-    final triggerName = '${schema}_$tableName${id}_updates_trigger';
+    late String idComparisonString;
+    late String notifierFunctionName;
+    late String notifierChannel;
+    late String triggerName;
+
+    final md5Hash = _shortenId(id);
+    notifierFunctionName = '${schema}_${tableName}_${md5Hash}_updates_function';
+    notifierChannel = '${schema}_${tableName}_${md5Hash}_updates_channel';
+    triggerName = '${schema}_${tableName}_${md5Hash}_updates_trigger';
+    if (id is int) {
+      idComparisonString = 'NEW.$primaryKeyColumn = $id';
+    } else if (id is String) {
+      idComparisonString = 'NEW.$primaryKeyColumn = \'$id\'';
+    } else {
+      throw Exception('id must be either int or String');
+    }
+
     final createTableUpdateFunction = '''
 CREATE OR REPLACE FUNCTION $notifierFunctionName() 
   RETURNS TRIGGER
   LANGUAGE plpgsql
    AS \$\$
   BEGIN
-    IF NEW.id = $id THEN
+    IF $idComparisonString THEN
       PERFORM pg_notify('$notifierChannel', NEW.$primaryKeyColumn::text);
     END IF;
     RETURN NULL;
   END;
 \$\$;
 ''';
+    info(createTableUpdateFunction);
 
     final createTableUpdatesTrigger = '''
   CREATE TRIGGER $triggerName
@@ -136,6 +154,7 @@ CREATE OR REPLACE FUNCTION $notifierFunctionName()
   EXECUTE FUNCTION $notifierFunctionName();
 
   ''';
+    info(createTableUpdatesTrigger);
 
     final connection = await v3ConnectionPool;
 
@@ -178,5 +197,14 @@ EXECUTE FUNCTION $notifierFunctionName();
     await connection.execute(PgSql(createTableDeletesTrigger));
     await connection.execute('LISTEN $notifierChannel;');
     return connection.channels[notifierChannel];
+  }
+
+  String _shortenId(dynamic id) {
+    final md5Hash = md5.convert(utf8.encode(id.toString()));
+    if (id is int || id is String) {
+      return md5Hash.toString().substring(0, 8);
+    } else {
+      throw Exception('id must be either int or String');
+    }
   }
 }

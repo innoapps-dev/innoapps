@@ -324,11 +324,12 @@ void main() {
     }));
 
     test('can get rowUpdatesStream', () async {
-      final user1 = ('User 1', 'Last Name', 'user1@gmail.com');
-      final user2 = ('User 2', 'Last Name', 'user2@gmail.com');
+      final user1 = (faker.uuid(), 'User 1', 'Last Name', 'user1@gmail.com');
+      final user2 = (faker.uuid(), 'User 2', 'Last Name', 'user2@gmail.com');
       final user1Id = await innoUserDatabase.insertQuerySingleKey(
         values: {
           TempUserDatabase.columnFirstName: user1.$1,
+          TempUserDatabase.columnId: user1.$1,
           TempUserDatabase.columnLastName: user1.$2,
           TempUserDatabase.columnEmail: user1.$3,
         },
@@ -337,6 +338,7 @@ void main() {
       final user2Id = await innoUserDatabase.insertQuerySingleKey(
         values: {
           TempUserDatabase.columnFirstName: user2.$1,
+          TempUserDatabase.columnId: user2.$1,
           TempUserDatabase.columnLastName: user2.$2,
           TempUserDatabase.columnEmail: user2.$3,
         },

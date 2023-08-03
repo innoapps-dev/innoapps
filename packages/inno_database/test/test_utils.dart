@@ -154,7 +154,7 @@ class TempUserDatabase extends InnoSingleKeyDaoBase<Map<String, dynamic>> {
   Future setup() {
     return connectionPool.execute(
       'CREATE TABLE IF NOT EXISTS $tableName ('
-      '$columnId SERIAL PRIMARY KEY,'
+      '$columnId VARCHAR PRIMARY KEY,'
       '$columnFirstName VARCHAR(255),'
       '$columnLastName VARCHAR(255),'
       '$columnEmail VARCHAR(255),'

@@ -4,19 +4,17 @@ import 'package:postgres/postgres_v3_experimental.dart' as v3;
 
 //DAO: data access object
 
-abstract class InnoDatabase {
+abstract class InnoDatabase with LoggerMixin {
   abstract final String schema;
   abstract final String tableName;
   abstract final List<String> columns;
 
   final InnoConnectionPool connectionPool;
-  late Logger _logger;
   late Future<v3.PgConnection> v3ConnectionPool;
 
   InnoDatabase({
     required this.connectionPool,
   }) {
-    _logger = Logger(runtimeType.toString());
     v3ConnectionPool = connectionPool.v3ConnectionPool;
   }
 
@@ -309,5 +307,37 @@ ORDER BY $schema.$tableName.$orderByColumn
       _logger.shout(e.runtimeType, e, st);
       rethrow;
     }
+  }
+}
+
+mixin LoggerMixin {
+  Logger get _logger => Logger(runtimeType.toString());
+
+  void info(String message) {
+    _logger.info(message);
+  }
+
+  void warning(String message) {
+    _logger.warning(message);
+  }
+
+  void severe(String message) {
+    _logger.severe(message);
+  }
+
+  void shout(String message) {
+    _logger.shout(message);
+  }
+
+  void logError(String message) {
+    _logger.shout(message);
+  }
+
+  void logErrorWithStackTrace(String message, StackTrace st) {
+    _logger.shout(message, st);
+  }
+
+  void logErrorWithException(String message, Exception e) {
+    _logger.shout(message, e);
   }
 }
