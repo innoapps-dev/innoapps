@@ -15,7 +15,7 @@ abstract class InnoDatabase with LoggerMixin {
   InnoDatabase({
     required this.connectionPool,
   }) {
-    v3ConnectionPool = connectionPool.v3ConnectionPool;
+    v3ConnectionPool = connectionPool.v3ConnectionPool();
   }
 
   Future<PostgreSQLResult> selectAllQuery({

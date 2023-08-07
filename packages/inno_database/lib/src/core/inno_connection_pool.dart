@@ -82,19 +82,27 @@ class InnoConnectionPool extends PgPool {
     );
   }
 
-  Future<v3.PgConnection> get v3ConnectionPool => v3.PgConnection.open(
-        v3.PgEndpoint(
-          database: database,
-          host: host,
-          password: password,
-          port: port,
-          username: username,
-        ),
-        sessionSettings: v3.PgSessionSettings(
-          onBadSslCertificate: (p0) {
-            print('onBadSslCertificate');
-            return false;
-          },
-        ),
-      );
+  Future<v3.PgConnection> v3ConnectionPool({
+    bool allowCleartextPassword = false,
+    bool isUnixSocket = false,
+    bool requireSsl = false,
+  }) {
+    return v3.PgConnection.open(
+      v3.PgEndpoint(
+        database: database,
+        host: host,
+        password: password,
+        port: port,
+        username: username,
+        allowCleartextPassword: allowCleartextPassword,
+        isUnixSocket: isUnixSocket,
+        requireSsl: requireSsl,
+      ),
+      sessionSettings: v3.PgSessionSettings(
+        onBadSslCertificate: (p0) {
+          return true;
+        },
+      ),
+    );
+  }
 }
