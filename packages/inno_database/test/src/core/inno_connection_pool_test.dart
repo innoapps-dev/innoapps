@@ -7,7 +7,7 @@ void main() {
       envFilePath: '.env.local',
     );
     expect(result, isNotNull);
-    final v3ConnectionPool = await result.v3ConnectionPool();
+    final v3ConnectionPool = await result.v3PgConnection();
     expect(v3ConnectionPool, isNotNull);
   });
 
@@ -16,7 +16,7 @@ void main() {
       envFilePath: '.env.cloudrun',
     );
     expect(result, isNotNull);
-    final v3ConnectionPool = await result.v3ConnectionPool();
+    final v3ConnectionPool = await result.v3PgConnection();
     expect(v3ConnectionPool, isNotNull);
     result.close();
   });

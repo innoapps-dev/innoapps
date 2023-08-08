@@ -121,7 +121,8 @@ extension AsInnoConnectionPoolExtension on PgEndpoint {
   }
 }
 
-class TempUserDatabase extends InnoSingleKeyDaoBase<Map<String, dynamic>> {
+class TempUserDatabase
+    extends InnoSingleKeyDaoBaseWithStreaming<Map<String, dynamic>> {
   TempUserDatabase({required super.connectionPool});
 
   static String get columnId => 'id';

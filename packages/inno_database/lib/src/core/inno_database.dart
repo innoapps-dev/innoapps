@@ -10,12 +10,12 @@ abstract class InnoDatabase with LoggerMixin {
   abstract final List<String> columns;
 
   final InnoConnectionPool connectionPool;
-  late Future<v3.PgConnection> v3ConnectionPool;
+  late Future<v3.PgConnection> v3PgConnection;
 
   InnoDatabase({
     required this.connectionPool,
   }) {
-    v3ConnectionPool = connectionPool.v3ConnectionPool();
+    v3PgConnection = connectionPool.v3PgConnection();
   }
 
   Future<PostgreSQLResult> selectAllQuery({
@@ -38,50 +38,6 @@ abstract class InnoDatabase with LoggerMixin {
       rethrow;
     }
     return result;
-  }
-
-  Future<PostgreSQLResult> joinAllQuery({
-    required String otherTableSchema,
-    required String otherTable,
-    required String otherTableJoinColumn,
-    required List<String> otherTableColumns,
-    required String thisTableColumn,
-    required String orderByColumn,
-  }) async {
-    final thisClassColumns = columns.map((e) => '$schema.$tableName.$e');
-    final otherTableColumnsFormatted =
-        otherTableColumns.map((e) => '$otherTableSchema.$otherTable.$e');
-
-    final sql = '''
-SELECT ${thisClassColumns.join(', ')}, ${otherTableColumnsFormatted.join(', ')}
-FROM $schema.$tableName
-INNER JOIN $schema.$otherTable
-ON $schema.$tableName.$thisTableColumn = $schema.$otherTable.$otherTableJoinColumn
-ORDER BY $schema.$tableName.$orderByColumn
-''';
-
-    _logger.info(sql);
-
-    late PostgreSQLResult result;
-
-    try {
-      result = await connectionPool.query(sql);
-    } catch (e, st) {
-      _logger.shout(e.runtimeType, e, st);
-      rethrow;
-    }
-    return result;
-  }
-
-  Future<PostgreSQLResult> joinAllQueryWhere({
-    required String otherTable,
-    required String otherTableColumn,
-    required String thisTableColumn,
-    required String orderByColumn,
-    required String whereColumn,
-    required dynamic whereValue,
-  }) async {
-    throw UnimplementedError();
   }
 
   Future<PostgreSQLResult> selectByQuery({
@@ -341,3 +297,118 @@ mixin LoggerMixin {
     _logger.shout(message, e);
   }
 }
+
+abstract class DatabaseColumnDefinition<T> {
+  T getValueFromRow(PostgreSQLResultRow row, String columnName);
+  T getValue();
+  String get name;
+  String get type;
+  bool get isPrimaryKey;
+  bool get isAutoIncrement;
+  bool get isNullable;
+  bool get isUnique;
+  bool get isIndexed;
+  String get ddl;
+}
+
+abstract class IntColumn extends DatabaseColumnDefinition<int> {
+  @override
+  int getValueFromRow(PostgreSQLResultRow row, String columnName) {
+    return row.toColumnMap()[columnName] as int;
+  }
+
+  @override
+  String get type => 'int';
+
+  @override
+  String get ddl => '$name $type ${isPrimaryKey ? 'PRIMARY KEY' : ''}';
+}
+
+class IntPrimaryKeyColumn extends IntColumn {
+  IntPrimaryKeyColumn(this._value, this.name);
+
+  final int _value;
+  @override
+  final String name;
+
+  @override
+  int getValue() {
+    return _value;
+  }
+
+  @override
+  bool get isPrimaryKey => true;
+
+  @override
+  bool get isAutoIncrement => true;
+
+  @override
+  bool get isNullable => false;
+
+  @override
+  bool get isUnique => true;
+
+  @override
+  bool get isIndexed => true;
+}
+
+abstract class StringColumn extends DatabaseColumnDefinition<String> {
+  @override
+  String getValueFromRow(PostgreSQLResultRow row, String columnName) {
+    return row.toColumnMap()[columnName] as String;
+  }
+
+  @override
+  String get type => 'text';
+
+  @override
+  String get ddl => '$name $type ${isPrimaryKey ? 'PRIMARY KEY' : ''}';
+
+  @override
+  String toString() {
+    return getValue();
+  }
+}
+
+abstract class BoolColumn extends DatabaseColumnDefinition<bool> {
+  @override
+  bool getValueFromRow(PostgreSQLResultRow row, String columnName) {
+    return row.toColumnMap()[columnName] as bool;
+  }
+
+  @override
+  String get type => 'boolean';
+
+  @override
+  String get ddl => '$name $type ${isPrimaryKey ? 'PRIMARY KEY' : ''}';
+}
+
+abstract class DateTimeColumn extends DatabaseColumnDefinition<DateTime> {
+  @override
+  DateTime getValueFromRow(PostgreSQLResultRow row, String columnName) {
+    return row.toColumnMap()[columnName] as DateTime;
+  }
+
+  @override
+  String get type => 'timestamp';
+
+  @override
+  String get ddl => '$name $type ${isPrimaryKey ? 'PRIMARY KEY' : ''}';
+}
+
+// abstract class GeometryColumn extends DatabaseColumnDefinition<Geometry> {
+//   @override
+//   Geometry getValueFromRow(PostgreSQLResultRow row, String columnName) {
+//     return row.toColumnMap()[columnName] as Geometry;
+//   }
+
+//   @override
+//   String get type => 'geometry';
+
+//   @override
+//   String get ddl => '$name $type ${isPrimaryKey ? 'PRIMARY KEY' : ''}';
+// }
+
+/// CREATE TABLE users (
+///   id SERIAL PRIMARY KEY,
+/// )

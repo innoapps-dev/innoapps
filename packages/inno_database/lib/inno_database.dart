@@ -30,6 +30,7 @@ export 'src/api/inno_event_session_dao.dart';
 
 // Core
 export 'src/core/inno_single_key_dao_base.dart';
+export 'src/core/inno_single_key_dao_base_with_streaming.dart';
 export 'src/core/inno_database_extensions.dart';
 
 // uuid

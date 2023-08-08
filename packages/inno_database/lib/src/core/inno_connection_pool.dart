@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dotenv/dotenv.dart';
 import 'package:postgres_pool/postgres_pool.dart';
 import 'package:postgres/postgres_v3_experimental.dart' as v3;
@@ -82,10 +84,12 @@ class InnoConnectionPool extends PgPool {
     );
   }
 
-  Future<v3.PgConnection> v3ConnectionPool({
+  Future<v3.PgConnection> v3PgConnection({
     bool allowCleartextPassword = false,
     bool isUnixSocket = false,
     bool requireSsl = false,
+    Duration timeout = const Duration(seconds: 30),
+    Duration connectionTimeout = const Duration(seconds: 30),
   }) {
     return v3.PgConnection.open(
       v3.PgEndpoint(
@@ -102,7 +106,44 @@ class InnoConnectionPool extends PgPool {
         onBadSslCertificate: (p0) {
           return true;
         },
+        connectTimeout: Duration(hours: 1),
+      ),
+    );
+  }
+
+  v3.PgPool get v3Pool {
+    return v3.PgPool(
+      [
+        v3.PgEndpoint(
+          database: database,
+          host: host,
+          password: password,
+          port: port,
+          username: username,
+        )
+      ],
+      sessionSettings: v3.PgSessionSettings(
+        onBadSslCertificate: (p0) {
+          return true;
+        },
+        connectTimeout: Duration(seconds: 5),
+        // transformer: StreamChannelTransformer<BaseMessage, BaseMessage>(
+        //   StreamTransformer.fromHandlers(
+        //     handleData: (msg, sink) {
+        //       print(msg);
+        //       sink.add(msg);
+        //     },
+        //   ),
+        //   StreamSinkTransformer.fromHandlers(handleData: (msg, sink) {
+        //     print(msg);
+        //     sink.add(msg);
+        //   }),
+        // ),
       ),
     );
   }
 }
+
+// class V3ConnectionPool extends v3.PgPool {
+  
+// }

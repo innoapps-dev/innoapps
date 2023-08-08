@@ -55,47 +55,6 @@ void main() {
       expect(result, isA<int>());
     });
 
-    test('can run join query', () async {
-      final result = await innoUserDatabase.joinAllQuery(
-        otherTableSchema: 'public',
-        otherTable: 'user_events',
-        otherTableJoinColumn: 'user_id',
-        otherTableColumns: innoEventsDatabase.columns,
-        thisTableColumn: TempUserDatabase.columnId,
-        orderByColumn: TempUserDatabase.columnId,
-      );
-      expect(result, isNotNull);
-      final values = {
-        TempUserDatabase.columnFirstName: 'First Name',
-        TempUserDatabase.columnLastName: 'Last Name',
-        TempUserDatabase.columnEmail: 'u@gmail.com',
-      };
-      final userId = await innoUserDatabase.insertQuerySingleKey(
-        values: values,
-        primaryKeyColumn: TempUserDatabase.columnId,
-      );
-      expect(userId, isA<int>());
-      final eventValues = {
-        TempEventsDatabase.columnUserId: userId,
-        TempEventsDatabase.columnTitle: 'Title',
-      };
-      final eventId = await innoEventsDatabase.insertQuerySingleKey(
-        values: eventValues,
-        primaryKeyColumn: TempEventsDatabase.columnId,
-      );
-      expect(eventId, isA<int>());
-      final result2 = await innoUserDatabase.joinAllQuery(
-        otherTableSchema: 'public',
-        otherTable: 'user_events',
-        otherTableJoinColumn: 'user_id',
-        otherTableColumns: innoEventsDatabase.columns,
-        thisTableColumn: TempUserDatabase.columnId,
-        orderByColumn: TempUserDatabase.columnId,
-      );
-      expect(result2, isNotEmpty);
-      print(result2.first.toColumnMap());
-    });
-
     test('can select greatorThan', () async {
       var result = await innoUserDatabase.selectGreaterThanQuery(
         filterColumn: TempUserDatabase.columnId,
@@ -344,21 +303,24 @@ void main() {
         },
         primaryKeyColumn: TempUserDatabase.columnId,
       );
-      final user1UpdateStream = (await innoUserDatabase.rowUpdatesStream(
+      final user1UpdateStream =
+          (await innoUserDatabase.selectQuerySingleKeyStream(
         id: user1Id,
       ))
-          .map((event) => event[TempUserDatabase.columnFirstName])
-          .cast<String>();
-      final user2UpdateStream = (await innoUserDatabase.rowUpdatesStream(
+              .map((event) => event[TempUserDatabase.columnFirstName])
+              .cast<String>();
+      final user2UpdateStream =
+          (await innoUserDatabase.selectQuerySingleKeyStream(
         id: user2Id,
       ))
-          .map((event) => event[TempUserDatabase.columnFirstName])
-          .cast<String>();
-      final user2ClondedUpdateStream = (await innoUserDatabase.rowUpdatesStream(
+              .map((event) => event[TempUserDatabase.columnFirstName])
+              .cast<String>();
+      final user2ClondedUpdateStream =
+          (await innoUserDatabase.selectQuerySingleKeyStream(
         id: user2Id,
       ))
-          .map((event) => event[TempUserDatabase.columnFirstName])
-          .cast<String>();
+              .map((event) => event[TempUserDatabase.columnFirstName])
+              .cast<String>();
       expect(user1UpdateStream, emitsInOrder(['New Name']));
       expect(user2UpdateStream, emitsInOrder(['New Name2']));
       expect(user2ClondedUpdateStream, emitsInOrder(['New Name2']));
