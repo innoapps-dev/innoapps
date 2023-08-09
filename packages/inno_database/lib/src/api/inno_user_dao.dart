@@ -1,6 +1,6 @@
 import 'package:inno_database/inno_database.dart';
 
-class InnoUserDao extends InnoSingleKeyDaoBase<InnoUser> {
+class InnoUserDao extends InnoSingleKeyDaoBaseWithStreaming<InnoUser> {
   static String columnUid = 'uid';
   static String columnFirstName = 'first_name';
   static String columnLastName = 'last_name';
