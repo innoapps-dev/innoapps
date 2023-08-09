@@ -1,6 +1,5 @@
 import 'package:inno_database/inno_database.dart';
 import 'package:logging/logging.dart';
-import 'package:postgres/postgres_v3_experimental.dart' as v3;
 
 //DAO: data access object
 
@@ -10,13 +9,10 @@ abstract class InnoDatabase with LoggerMixin {
   abstract final List<String> columns;
 
   final InnoConnectionPool connectionPool;
-  late Future<v3.PgConnection> v3PgConnection;
 
   InnoDatabase({
     required this.connectionPool,
-  }) {
-    v3PgConnection = connectionPool.v3PgConnection();
-  }
+  });
 
   Future<PostgreSQLResult> selectAllQuery({
     required String orderByColumn,

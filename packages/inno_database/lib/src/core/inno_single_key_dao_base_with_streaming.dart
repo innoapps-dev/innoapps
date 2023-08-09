@@ -41,7 +41,7 @@ EXECUTE PROCEDURE $notifierFunctionName();
         await connection.execute(PgSql(createTableInsertsTrigger));
       },
     ).then((value) async {
-      final connection = await v3PgConnection;
+      final connection = await connectionPool.v3PgConnection();
       final stream = connection.channels[notifierChannel].asyncMap((id) async {
         final result = await select(id: id);
         return result;
@@ -108,12 +108,13 @@ CREATE OR REPLACE FUNCTION $notifierFunctionName()
       await connection.execute(PgSql(createTableUpdatesTrigger));
     }).then(
       (value) async {
-        final connection = await v3PgConnection;
-        final stream =
-            connection.channels[notifierChannel].asyncMap((id) async {
-          final result = await select(id: id);
-          return result;
-        });
+        final connection = await connectionPool.v3PgConnection();
+        final stream = connection.channels[notifierChannel].asyncMap(
+          (id) async {
+            final result = await select(id: id);
+            return result;
+          },
+        );
         stream.listen(
           (event) {},
           onDone: () => connection.close(),
@@ -150,7 +151,7 @@ EXECUTE FUNCTION $notifierFunctionName();
       await connection.execute(PgSql(createTableDeletesTrigger));
     }).then(
       (value) async {
-        final connection = await v3PgConnection;
+        final connection = await connectionPool.v3PgConnection();
         final stream = connection.channels[notifierChannel];
         stream.listen(
           (event) {},
@@ -222,7 +223,7 @@ EXECUTE FUNCTION $notifierFunctionName();
       await connection.execute(PgSql(selectByValueQueryTrigger));
     }).then(
       (value) async {
-        final connection = await v3PgConnection;
+        final connection = await connectionPool.v3PgConnection();
         final stream = connection.channels[notifierChannel].asyncMap((_) async {
           final result = await selectByQuery(
             filterColumn: filterColumn,
