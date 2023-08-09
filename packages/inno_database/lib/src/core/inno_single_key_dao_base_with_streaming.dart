@@ -42,10 +42,16 @@ EXECUTE PROCEDURE $notifierFunctionName();
       },
     ).then((value) async {
       final connection = await v3PgConnection;
-      return connection.channels[notifierChannel].asyncMap((id) async {
+      final stream = connection.channels[notifierChannel].asyncMap((id) async {
         final result = await select(id: id);
         return result;
       });
+      stream.listen(
+        (event) {},
+        onDone: () => connection.close(),
+        onError: (e) => connection.close(),
+      );
+      return stream;
     });
   }
 
@@ -103,10 +109,17 @@ CREATE OR REPLACE FUNCTION $notifierFunctionName()
     }).then(
       (value) async {
         final connection = await v3PgConnection;
-        return connection.channels[notifierChannel].asyncMap((id) async {
+        final stream =
+            connection.channels[notifierChannel].asyncMap((id) async {
           final result = await select(id: id);
           return result;
         });
+        stream.listen(
+          (event) {},
+          onDone: () => connection.close(),
+          onError: (e) => connection.close(),
+        );
+        return stream;
       },
     );
   }
@@ -138,7 +151,13 @@ EXECUTE FUNCTION $notifierFunctionName();
     }).then(
       (value) async {
         final connection = await v3PgConnection;
-        return connection.channels[notifierChannel];
+        final stream = connection.channels[notifierChannel];
+        stream.listen(
+          (event) {},
+          onDone: () => connection.close(),
+          onError: (e) => connection.close(),
+        );
+        return stream;
       },
     );
   }
@@ -204,7 +223,7 @@ EXECUTE FUNCTION $notifierFunctionName();
     }).then(
       (value) async {
         final connection = await v3PgConnection;
-        return connection.channels[notifierChannel].asyncMap((_) async {
+        final stream = connection.channels[notifierChannel].asyncMap((_) async {
           final result = await selectByQuery(
             filterColumn: filterColumn,
             filterValue: filterValue,
@@ -212,6 +231,12 @@ EXECUTE FUNCTION $notifierFunctionName();
           );
           return Future.wait(result.map((e) => mapToModel(row: e)));
         });
+        stream.listen(
+          (event) {},
+          onDone: () => connection.close(),
+          onError: (e) => connection.close(),
+        );
+        return stream;
       },
     );
   }
