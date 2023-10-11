@@ -8,7 +8,7 @@ environment:
   sdk: '^3.0.0'
 
 dependencies:
-  postgres: 2.6.1
+  postgres: ^2.6.3
   uuid: ^3.0.7
   postgres_pool: ^2.1.6
   fpdart: ^0.6.0
@@ -25,8 +25,3 @@ dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
   faker_dart: ^0.1.11
-
-dependency_overrides:
-  postgres:
-    git:
-      url: https://github.com/isoos/postgresql-dart
